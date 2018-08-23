@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TextField?>
+
+<AnchorPane id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="161.0" prefWidth="435.0" style="-fx-background-color: #3d5afe;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="6.0" layoutY="6.0" prefHeight="149.0" prefWidth="423.0" style="-fx-background-color: #fff;" />
+      <ImageView layoutX="202.0" layoutY="14.0">
+         <image>
+            <Image url="@/icons8_Warning_Shield_32px_1.png" />
+         </image>
+      </ImageView>
+      <Text id="title" fill="#0000007c" layoutX="1.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" textAlignment="CENTER" wrappingWidth="435.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text id="message" fill="#00000055" layoutX="1.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error message with stack trace" textAlignment="CENTER" wrappingWidth="435.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Text>
+      <Button id="closebutton" layoutX="196.0" layoutY="122.0" mnemonicParsing="false" text="Close" />
+      <PasswordField id="passwordfield" disable="true" layoutX="37.0" layoutY="93.0" prefHeight="25.0" prefWidth="364.0" visible="false" />
+      <TextField id="textfield" disable="true" layoutX="37.0" layoutY="93.0" prefHeight="25.0" prefWidth="364.0" visible="false" />
+   </children>
+</AnchorPane>

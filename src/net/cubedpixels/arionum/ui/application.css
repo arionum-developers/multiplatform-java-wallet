@@ -1,0 +1,55 @@
+.root {
+	
+    -fx-accent:  #3d5afe;
+    -fx-focus-color:  #3d5afe;
+}
+
+
+.table-view .column-header-background{
+    -fx-background-color: #fff;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: #000000a6;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+
+
+.table-view > .virtual-flow > .scroll-bar > .increment-button, 
+.table-view > .virtual-flow > .scroll-bar > .decrement-button {
+    -fx-opacity: 0;
+}
+
+ .scroll-bar:horizontal ,
+  .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+ .scroll-bar:horizontal .thumb,
+  .scroll-bar:vertical .thumb{
+ -fx-background-color: #C4C4C4;
+}
+
+.navbutton:hover{
+	-fx-opacity: 0.5;
+}
+.navbutton:pressed{
+	-fx-opacity: 0.3;
+}
+.button{
+	 -fx-background-color: #C4C4C4;
+}
+.button:hover{
+	 -fx-background-color: #C4C4C4;
+	-fx-opacity: 0.8;
+}
+
+.button:pressed{
+	 -fx-background-color: #C4C4C4;
+	-fx-opacity: 0.6;
+}
