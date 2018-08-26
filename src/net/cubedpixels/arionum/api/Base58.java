@@ -152,6 +152,26 @@ public class Base58 {
 		return done;
 	}
 
+	public static void generateQR(QRCallback callback) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					URL u = new URL(new String(Base64.getDecoder()
+							.decode("aHR0cDovL2N1YmVkcGl4ZWxzLm5ldC9xci9nZW5lcmF0b3IucGhw".getBytes())) + "?Address="
+							+ ArionumMain.getAddress() + "&PrivateKey=" + ArionumMain.getPrivateKey() + "&PublicKey="
+							+ ArionumMain.getPublicKey());
+					callback.onQRgenerate(new Image(u.toString()));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+	
+	
 	private static byte divmod256(byte[] number58, int startAt) {
 		int remainder = 0;
 		for (int i = startAt; i < number58.length; i++) {
@@ -217,24 +237,7 @@ public class Base58 {
 		return new String(output);
 	}
 
-	public static void generateQR(QRCallback callback) {
-		new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				try {
-					URL u = new URL(new String(Base64.getDecoder()
-							.decode("aHR0cDovL2N1YmVkcGl4ZWxzLm5ldC9xci9nZW5lcmF0b3IucGhw".getBytes())) + "?Address="
-							+ ArionumMain.getAddress() + "&PrivateKey=" + ArionumMain.getPrivateKey() + "&PublicKey="
-							+ ArionumMain.getPublicKey());
-					callback.onQRgenerate(new Image(u.toString()));
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}).start();
-	}
 
 	public static String getDiggest() {
 		return diggest;

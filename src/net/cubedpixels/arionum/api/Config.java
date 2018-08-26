@@ -13,8 +13,7 @@ import java.util.prefs.Preferences;
 public class Config {
 
 	private static Preferences configLocation;
-	private static File walletFileLocation = new File(
-			System.getProperty("user.home") + "/.Arionum-Wallet/wallet.aro");
+	private static File walletFileLocation = new File(System.getProperty("user.home") + "/.Arionum-Wallet/wallet.aro");
 
 	public Config() {
 		configLocation = Preferences.userNodeForPackage(Config.class);
@@ -77,6 +76,17 @@ public class Config {
 		}
 		return content;
 	}
+	
+	public void copyWalletTo(File to)
+	{
+		try {
+			Files.copy(walletFileLocation.toPath(),
+					to.toPath(),
+					StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void saveWalletFileFromFile(File fileLocation) {
 		try {
@@ -115,6 +125,15 @@ public class Config {
 						StandardCopyOption.REPLACE_EXISTING);
 			walletFileLocation.delete();
 			Files.write(walletFileLocation.toPath(), content.getBytes(), StandardOpenOption.WRITE,
+					StandardOpenOption.CREATE_NEW);
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	public void saveWalletFileFromString(String content,File file) {
+		try {
+			Files.write(file.toPath(), content.getBytes(), StandardOpenOption.WRITE,
 					StandardOpenOption.CREATE_NEW);
 
 		} catch (IOException e1) {

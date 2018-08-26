@@ -1,6 +1,7 @@
 package net.cubedpixels.arionum.ui;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -28,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.cubedpixels.arionum.ArionumMain;
@@ -48,6 +51,8 @@ public class HomeView extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		primaryStage.initStyle(StageStyle.UNDECORATED);
+		
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Arionum Wallet - Dashboard");
 		
 		primaryStage.setTitle("Arionum Wallet - Dashboard");
 		
@@ -82,6 +87,7 @@ public class HomeView extends Application {
 
 	public void setupIcon(Stage prStage) {
 		prStage.getIcons().add(new Image(HomeView.class.getResourceAsStream("/arionum_icon.png")));
+		MenuBar menuBar = new MenuBar();Platform.runLater(() -> menuBar.setUseSystemMenuBar(true));
 	}
 
 	private void setupNavbar(Parent root, Stage primaryStage) {
@@ -200,7 +206,7 @@ public class HomeView extends Application {
 		// minerbox
 		// startbutton
 		TextField field = (TextField) root.lookup("#poolURL");
-		field.setText("http://aro.cool/");
+		field.setText("https://aro.cool/");
 		root.lookup("#startbutton").setOnMouseReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
@@ -216,6 +222,8 @@ public class HomeView extends Application {
 					int MAXramThreads = (int) ((maxMemory / 0x100000L) / 512);
 					if (MAXramThreads <= max)
 						max = (int) (MAXramThreads);
+					if(max < 1)
+						max = 1;
 					miner.start(area, field.getText(), max);
 					if (ArionumMiner.isRunning()) {
 						((Button) root.lookup("#startbutton")).setText("Stop");
@@ -251,6 +259,29 @@ public class HomeView extends Application {
 					Desktop.getDesktop().open(Config.getWalletFileLocation().getParentFile());
 				} catch (IOException e) {
 					e.printStackTrace();
+				}
+			}
+		});
+		
+		Button backup = (Button) root.lookup("#backup");
+		backup.setOnMouseReleased(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				FileChooser fc = new FileChooser();
+				fc.setInitialFileName("wallet.aro");
+			      FileChooser.ExtensionFilter extFilter = 
+	                        new FileChooser.ExtensionFilter("Wallet files (*.aro)", "*.aro");
+				fc.setSelectedExtensionFilter(extFilter);
+				File selectedFile = fc.showSaveDialog(primaryStage);
+				if (selectedFile != null) {
+					if(ArionumMain.getConfig().getWalletFile().exists())
+					ArionumMain.getConfig().copyWalletTo(selectedFile);
+					else
+					{
+						String walletFileContent = "arionum:" + ArionumMain.getPrivateKey() + ":" + ArionumMain.getPublicKey();
+						ArionumMain.getConfig().saveWalletFileFromString(walletFileContent, selectedFile);
+					}
+					new Modal("Done", "File was saved!").show(primaryStage);
 				}
 			}
 		});
@@ -301,7 +332,7 @@ public class HomeView extends Application {
 									setupTransactions(root);
 								}
 							});
-						}
+						}else i++;
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -358,7 +389,7 @@ public class HomeView extends Application {
 					calendar.setTimeInMillis(date_long * 1000);
 
 					int mYear = calendar.get(Calendar.YEAR);
-					int mMonth = calendar.get(Calendar.MONTH);
+					int mMonth = calendar.get(Calendar.MONTH)+1;
 					int mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
 					String mHour = calendar.get(Calendar.HOUR_OF_DAY) + "";

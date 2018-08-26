@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -23,6 +24,8 @@ public class CreateView extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		primaryStage.initStyle(StageStyle.UNDECORATED);
+		
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Arionum Wallet - Create Wallet");
 		
 		primaryStage.setTitle("Arionum Wallet - Create Wallet");
 		
@@ -45,6 +48,7 @@ public class CreateView extends Application {
 
 	public void setupIcon(Stage prStage) {
 		prStage.getIcons().add(new Image(HomeView.class.getResourceAsStream("/arionum_icon.png")));
+		MenuBar menuBar = new MenuBar();Platform.runLater(() -> menuBar.setUseSystemMenuBar(true));
 	}
 
 	private void setupNavbar(Parent root, Stage primaryStage) {

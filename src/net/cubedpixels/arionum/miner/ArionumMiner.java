@@ -10,6 +10,7 @@ import java.net.NetworkInterface;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,7 +28,7 @@ public class ArionumMiner {
 	// TODO -> STATS
 	private static long overallHashes;
 	private static long startTimeInMillis;
-	private static double lastHashrate = 0;
+	private double lastHashrate = 0;
 	private static long minDL;
 	private int hasherClock = 0;
 	public static boolean ds;
@@ -238,6 +239,7 @@ public class ArionumMiner {
 		double currentHashRate = calculateAverage(hashTime);
 		hashTime.set(hashTime.size() - 1, currentHashRate);
 		currentHashes = 0;
+		this.lastHashrate = currentHashRate;
 		return currentHashRate;
 	}
 
@@ -338,7 +340,8 @@ public class ArionumMiner {
 					for (ArionumHasher hasher : hashers)
 						if (!hasher.isSuspended() && hasher.isActive())
 							hasherss++;
-					notify("Hashers:" + hasherss + "  |   Type:" + type + "   |   Hashrate: " + getCurrentHashrate());
+					getCurrentHashrate();
+					notify("Hashers:" + hasherss + "  |   Type:" + type + "   |   Hashrate: " + getLastHashrate());
 				}
 
 				hf_argon_m_cost = argon_mem;
@@ -467,12 +470,8 @@ public class ArionumMiner {
 		return instance;
 	}
 
-	public static double getLastHashrate() {
-		return lastHashrate;
-	}
-
-	public static void setLastHashrate(double lastHashrate) {
-		ArionumMiner.lastHashrate = lastHashrate;
+	public double getLastHashrate() {
+		return  Double.parseDouble(new DecimalFormat("#.##").format(lastHashrate).replaceAll(",", "."));
 	}
 
 	public void setOverallHashes(long overallHashes) {

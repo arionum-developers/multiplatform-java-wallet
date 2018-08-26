@@ -19,6 +19,14 @@
 }
 
 
+.table-view .column-body {
+    -fx-text-alignment: center;
+}
+.table-view .column {
+    -fx-text-alignment: center;
+}
+
+
 
 .table-view > .virtual-flow > .scroll-bar > .increment-button, 
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
