@@ -10,6 +10,7 @@ import net.cubedpixels.arionum.ui.CreateView;
 import net.cubedpixels.arionum.ui.HomeView;
 import net.cubedpixels.arionum.ui.InitUI;
 import net.cubedpixels.arionum.ui.Modal;
+import net.cubedpixels.arionum.ui.Notification;
 import net.cubedpixels.arionum.ui.Modal.TextFieldCallback;
 
 public class ArionumMain {
@@ -33,6 +34,7 @@ public class ArionumMain {
 	}
 
 	public void init() {
+		
 		config = new Config();
 		peerURL = "http://wallet.arionum.com/";
 		System.out.println("Initing UI....");
@@ -118,6 +120,7 @@ public class ArionumMain {
 					public void onCallback(String pw) {
 						if (pw.isEmpty()) {
 							new Modal("No Password entered!", "Shutting down!Bye bye..... :C").show(new Stage());
+							System.exit(0);
 							return;
 						}
 						String c = checkPasswordAndReturn(content, pw);

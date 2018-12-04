@@ -1,5 +1,9 @@
 package net.cubedpixels.arionum.api;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -55,6 +59,42 @@ public class AroApi {
 		return new String(decrypted);
 	}
 
+	public static String getMD5(File file) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			FileInputStream s = new FileInputStream(file);
+			String digest = getDigest(s, md, 2048);
+			s.close();
+			return digest;
+		} catch (Exception e) {
+			return "";
+		}
+	}
+
+	private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
+
+	public static String asHex(byte[] buf) {
+		char[] chars = new char[2 * buf.length];
+		for (int i = 0; i < buf.length; ++i) {
+			chars[2 * i] = HEX_CHARS[(buf[i] & 0xF0) >>> 4];
+			chars[2 * i + 1] = HEX_CHARS[buf[i] & 0x0F];
+		}
+		return new String(chars);
+	}
+
+	private static String getDigest(InputStream is, MessageDigest md, int byteArraySize)
+			throws NoSuchAlgorithmException, IOException {
+
+		md.reset();
+		byte[] bytes = new byte[byteArraySize];
+		int numBytes;
+		while ((numBytes = is.read(bytes)) != -1) {
+			md.update(bytes, 0, numBytes);
+		}
+		byte[] digest = md.digest();
+		String result = new String(asHex(digest));
+		return result;
+	}
 
 	public static ArionumKeyPair ecKeyPairGenerator() {
 		Security.addProvider(new BouncyCastleProvider());
@@ -64,7 +104,10 @@ public class AroApi {
 			ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
 			keyPairGenerator.initialize(ecGenParameterSpec, new SecureRandom());
 			keyPair = keyPairGenerator.generateKeyPair();
-			return new ArionumKeyPair(keyPair);
+			ArionumKeyPair akp = new ArionumKeyPair(keyPair);
+			if (akp.getPublicKey() == null)
+				return null;
+			return akp;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,17 +182,15 @@ public class AroApi {
 		return Base58.encode(work);
 	}
 
-	public static void getAlias(Runnable run)
-	{
+	public static void getAlias(Runnable run) {
 		ApiRequest.requestFeedback(new RequestFeedback() {
-			
+
 			@Override
 			public void onFeedback(JSONObject object) throws JSONException {
 				String alias = "none";
-				if(object.has("data"))
-				{
+				if (object.has("data")) {
 					String o = object.get("data").toString();
-					if(o == "null"||o == "false")
+					if (o == "null" || o == "false")
 						alias = "none";
 					else
 						alias = o;

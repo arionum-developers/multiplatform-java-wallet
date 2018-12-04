@@ -5,16 +5,21 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.stage.Stage;
+import net.cubedpixels.arionum.api.AroApi;
 
 public class InitUI {
 
@@ -36,6 +41,40 @@ public class InitUI {
 		centreWindow(window);
 		window.setVisible(true);
 		new JFXPanel();
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					//SERVER
+					URL u = new URL("http://cubedpixels.net/arionum/getVersion.php");
+					Scanner s = new Scanner(u.openStream());
+					
+					//CLIENT
+					File f = new File(System.getProperty("java.class.path"));
+					
+					String server_md5 = s.next();
+					String client_md5 = AroApi.getMD5(f);
+					
+					s.close();
+					
+					if(!server_md5.equals(client_md5))
+					{
+						Platform.runLater(new Runnable() {
+							
+							@Override
+							public void run() {
+								new Modal("Update Notification", "There's a new Update available!").show(new Stage());
+							}
+						});
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

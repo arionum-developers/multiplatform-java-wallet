@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="90.0" prefWidth="405.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <ImageView fitHeight="85.0" fitWidth="64.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/arionum_icon.png" />
+         </image>
+      </ImageView>
+      <Text fill="#000000b4" layoutX="91.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Received 1000.00 ARO from">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Text>
+      <Text fill="#00000067" layoutX="91.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1gPvUp3kW6ARDU84b7g8YKssWhdfLadNqrKR81W8RKtYLupbJHimBtMSPkHGLXhFcynkABydovjiRUUCM3SZxCG" wrappingWidth="273.634765625">
+         <font>
+            <Font size="7.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

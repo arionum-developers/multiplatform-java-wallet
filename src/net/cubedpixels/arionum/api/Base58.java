@@ -9,21 +9,18 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.Signature;
-import java.security.spec.ECParameterSpec;
-import java.security.spec.ECPrivateKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.bouncycastle.asn1.x9.ECNamedCurveTable;
-import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.spec.ECNamedCurveSpec;
+import org.bouncycastle.jce.spec.ECPrivateKeySpec;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 
@@ -243,19 +240,16 @@ public class Base58 {
 		return diggest;
 	}
 
-	public static PrivateKey getPrivateKeyFromECBigIntAndCurve(BigInteger s, String curveName) {
-		X9ECParameters ecCurve = ECNamedCurveTable.getByName(curveName);
-		ECParameterSpec ecParameterSpec = new ECNamedCurveSpec(curveName, ecCurve.getCurve(), ecCurve.getG(),
-				ecCurve.getN(), ecCurve.getH(), ecCurve.getSeed());
-		ECPrivateKeySpec privateKeySpec = new ECPrivateKeySpec(s, ecParameterSpec);
-		try {
-			KeyFactory keyFactory = KeyFactory.getInstance("EC");
-			return keyFactory.generatePrivate(privateKeySpec);
-		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+	   public static PrivateKey getPrivateKeyFromECBigIntAndCurve(BigInteger s, String curveName) {
+	        ECPrivateKeySpec privateKeySpec = new ECPrivateKeySpec(s, ECNamedCurveTable.getParameterSpec(curveName));
+	        try {
+	            KeyFactory keyFactory = KeyFactory.getInstance("EC");
+	            return keyFactory.generatePrivate(privateKeySpec);
+	        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
 
 	public static String getSHA256(String data) {
 		StringBuilder sb = new StringBuilder();

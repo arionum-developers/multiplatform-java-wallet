@@ -85,7 +85,10 @@ public class Modal {
 			InitUI.window.setVisible(false);
 			primaryStage.showAndWait();
 			for (TextFieldCallback tfc : callbacks)
-				tfc.onCallback(((TextField) root.lookup("#passwordfield")).getText());
+				if(!textfield && passwordfield)
+					tfc.onCallback(((TextField) root.lookup("#passwordfield")).getText());
+				else if(textfield && !passwordfield)
+					tfc.onCallback(((TextField) root.lookup("#textfield")).getText());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

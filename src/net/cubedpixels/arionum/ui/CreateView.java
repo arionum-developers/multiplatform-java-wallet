@@ -115,6 +115,8 @@ public class CreateView extends Application {
 
 				// TODO -> CREATE WALLET
 				ArionumKeyPair keyPair = AroApi.ecKeyPairGenerator();
+				if(keyPair == null)
+					return;
 				String walletFileContent = "arionum:" + keyPair.getPrivateKey() + ":" + keyPair.getPublicKey();
 				String password = field1.getText();
 				try {
@@ -140,6 +142,8 @@ public class CreateView extends Application {
 			public void handle(MouseEvent mouseEvent) {
 				// TODO -> CREATE WALLET
 				ArionumKeyPair keyPair = AroApi.ecKeyPairGenerator();
+				if(keyPair == null)
+					return;
 				String walletFileContent = "arionum:" + keyPair.getPrivateKey() + ":" + keyPair.getPublicKey();
 				ArionumMain.getConfig().saveWalletFileFromString(walletFileContent);
 				ArionumMain.initKeys(new Runnable() {

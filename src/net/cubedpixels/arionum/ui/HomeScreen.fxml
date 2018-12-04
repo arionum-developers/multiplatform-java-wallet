@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
@@ -8,11 +9,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="419.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="rootPane" prefHeight="419.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane id="InfoView" disable="true" layoutX="1.0" layoutY="1.0" prefHeight="419.0" prefWidth="714.0" visible="false">
+      <Pane id="InfoView" disable="true" visible="false" layoutX="1.0" layoutY="1.0" prefHeight="419.0" prefWidth="714.0">
          <children>
-            <Text fill="#000000ab" layoutX="305.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Information">
+            <Text id="info_title" fill="#000000ab" layoutX="305.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Information">
                <font>
                   <Font size="20.0" />
                </font>
@@ -21,7 +22,7 @@
             <Text fill="#00000083" layoutX="37.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PrivateKey" />
             <TextField id="pkeyfield" editable="false" layoutX="37.0" layoutY="124.0" prefHeight="25.0" prefWidth="638.0" />
             <TextField id="prkeyfield" editable="false" layoutX="37.0" layoutY="180.0" prefHeight="25.0" prefWidth="638.0" />
-            <Text fill="#0000005f" layoutX="331.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wallet QR" />
+            <Text id="wallet_QR_text" fill="#0000005f" layoutX="331.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wallet QR" />
             <ImageView id="qrimage" fitHeight="149.0" fitWidth="149.0" layoutX="283.0" layoutY="261.0" pickOnBounds="true" preserveRatio="true" />
             <Button id="logout" layoutX="39.0" layoutY="364.0" mnemonicParsing="false" text="Logout" />
             <Button id="walletstorage" layoutX="581.0" layoutY="364.0" mnemonicParsing="false" text="Wallet Storage" />
@@ -30,21 +31,21 @@
       </Pane>
       <Pane id="MinerView" disable="true" layoutX="1.0" layoutY="2.0" prefHeight="419.0" prefWidth="714.0" visible="false">
          <children>
-            <Text fill="#000000ab" layoutX="331.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Miner">
+            <Text id="miner_title" fill="#000000ab" layoutX="331.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Miner">
                <font>
                   <Font size="20.0" />
                </font>
             </Text>
             <TextArea id="minerbox" editable="false" layoutX="27.0" layoutY="148.0" prefHeight="200.0" prefWidth="660.0" />
-            <Text fill="#00000030" layoutX="295.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Proof of concept miner" />
+            <Text id="miner_desc" fill="#00000030" layoutX="295.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Proof of concept miner" />
             <Button id="startbutton" layoutX="635.0" layoutY="357.0" mnemonicParsing="false" text="Start" />
             <TextField id="poolURL" layoutX="27.0" layoutY="112.0" prefHeight="25.0" prefWidth="227.0" />
             <Text fill="#00000084" layoutX="27.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pool URL:" />
          </children>
       </Pane>
-      <Pane id="SendView" disable="true" layoutX="1.0" layoutY="1.0" prefHeight="419.0" prefWidth="714.0" visible="false">
+      <Pane id="SendView" disable="true" layoutX="1.0" layoutY="1.0" prefHeight="419.0" prefWidth="714.0" visible="false" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
-            <Text fill="#000000ab" layoutX="281.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Send Transaction">
+            <Text id="send_title" fill="#000000ab" layoutX="281.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Send Transaction">
                <font>
                   <Font size="20.0" />
                </font>
@@ -56,10 +57,10 @@
             <Text fill="#0000005c" layoutX="28.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Message:" />
             <TextField id="messagefield" layoutX="28.0" layoutY="254.0" prefHeight="25.0" prefWidth="345.0" promptText="Enter your personalized message here" />
             <Button id="sendtransaction" layoutX="636.0" layoutY="355.0" mnemonicParsing="false" text="Send" />
-            <Text fill="#0000003c" layoutX="226.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Send an specific amount of ARO to an destination" />
+            <Text id="send_desc" fill="#0000003c" layoutX="226.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Send an specific amount of ARO to an destination" />
          </children>
       </Pane>
-      <Pane id="HomeView" prefHeight="419.0" prefWidth="714.0">
+      <Pane id="HomeView" prefHeight="419.0" prefWidth="714.0" visible="true">
          <children>
             <ImageView layoutX="21.0" layoutY="65.0">
                <image>
@@ -67,27 +68,43 @@
                </image>
             </ImageView>
             <TextField id="addressline" layoutX="59.0" layoutY="69.0" prefHeight="25.0" prefWidth="499.0" />
-            <TableView id="tableview" focusTraversable="false" layoutX="5.0" layoutY="111.0" prefHeight="303.0" prefWidth="704.0">
-              <columns>
-                <TableColumn prefWidth="109.0" text="Date" />
-                <TableColumn prefWidth="59.0" text="Action" />
-                  <TableColumn prefWidth="107.0" text="Value" />
-                  <TableColumn prefWidth="72.0" text="Fee" />
-                  <TableColumn prefWidth="87.0" text="Confirmations" />
-                  <TableColumn prefWidth="55.0" text="From" />
-                  <TableColumn prefWidth="53.0" text="To" />
-                  <TableColumn prefWidth="77.0" text="Message" />
-                  <TableColumn prefWidth="94.0" text="ID" />
-              </columns>
-            </TableView>
+            <GridPane layoutX="5.0" layoutY="111.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TableView id="tableview" focusTraversable="false" layoutX="5.0" layoutY="111.0" prefHeight="303.0" prefWidth="704.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                    <columns>
+                      <TableColumn prefWidth="109.0" text="Date" />
+                      <TableColumn prefWidth="59.0" text="Action" />
+                        <TableColumn prefWidth="107.0" text="Value" />
+                        <TableColumn prefWidth="72.0" text="Fee" />
+                        <TableColumn prefWidth="87.0" text="Confirmations" />
+                        <TableColumn prefWidth="55.0" text="From" />
+                        <TableColumn prefWidth="53.0" text="To" />
+                        <TableColumn prefWidth="77.0" text="Message" />
+                        <TableColumn prefWidth="94.0" text="ID" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                  </TableView>
+               </children>
+            </GridPane>
             <TextField id="youralias" disable="true" editable="false" layoutX="578.0" layoutY="69.0" prefHeight="25.0" prefWidth="122.0" visible="false" />
-            <Text fill="#00000089" layoutX="578.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Alias:" />
+            <Text id="alias_text" fill="#00000089" layoutX="578.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Alias:" />
             <Button id="createalias" disable="true" layoutX="580.0" layoutY="69.0" mnemonicParsing="false" text="Create one" visible="false" />
          </children>
       </Pane>
       <Pane id="Navigation" prefHeight="52.0" prefWidth="714.0">
          <children>
-            <Pane layoutX="-4.0" prefHeight="51.0" prefWidth="722.0" style="-fx-background-color: #3d5afe;">
+            <Pane id="navbar" layoutX="-4.0" prefHeight="51.0" prefWidth="722.0" style="-fx-background-color: #3d5afe;">
                <children>
                   <Pane id="HomeButton" layoutX="212.0" layoutY="6.0" prefHeight="39.0" prefWidth="44.0" styleClass="navbutton">
                      <children>
@@ -136,13 +153,20 @@
                   <Image url="@/icons8_Cancel_32px_1.png" />
                </image>
             </ImageView>
-            <ImageView id="hidebutton" layoutX="655.0" pickOnBounds="true" styleClass="navbutton">
+            
+             <ImageView id="resizebutton" layoutX="655.0" pickOnBounds="true" styleClass="navbutton">
+               <image>
+                  <Image url="@/icons8-xbox-windows-32.png" />
+               </image>
+            </ImageView>
+            
+            <ImageView id="hidebutton" layoutX="625.0" pickOnBounds="true" styleClass="navbutton">
                <image>
                   <Image url="@/icons8_Minus_32px_1.png" />
                </image>
             </ImageView>
                   
-                  <Text fill="WHITE" fontSmoothingType="LCD" layoutX="520.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Balance" textAlignment="CENTER" underline="true">
+                  <Text id="balance-text" fill="WHITE" fontSmoothingType="LCD" layoutX="520.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Balance" textAlignment="CENTER" underline="true">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
