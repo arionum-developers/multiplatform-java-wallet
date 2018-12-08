@@ -1,6 +1,14 @@
 package net.cubedpixels.arionum;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.Base64;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -10,7 +18,6 @@ import net.cubedpixels.arionum.ui.CreateView;
 import net.cubedpixels.arionum.ui.HomeView;
 import net.cubedpixels.arionum.ui.InitUI;
 import net.cubedpixels.arionum.ui.Modal;
-import net.cubedpixels.arionum.ui.Notification;
 import net.cubedpixels.arionum.ui.Modal.TextFieldCallback;
 
 public class ArionumMain {
@@ -26,15 +33,50 @@ public class ArionumMain {
 	public ArionumMain() {
 		init();
 	}
+	private static Image getScaledImage(Image srcImg, int w, int h){
+	    BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+	    Graphics2D g2 = resizedImg.createGraphics();
 
+	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	    g2.drawImage(srcImg, 0, 0, w, h, null);
+	    g2.dispose();
+
+	    return resizedImg;
+	}
 	public static void main(String[] args) {
 		System.out.println("Starting Arionum Wallet...");
-		InitUI.initUI();
-		new ArionumMain();
+		boolean isJavaFxAvailable;
+		try {
+			System.out.println("Checking for JavaFX");
+			@SuppressWarnings({ "rawtypes", "unused" })
+			Class jfxPanel = ArionumMain.class.getClassLoader().loadClass("javafx.embed.swing.JFXPanel");
+			isJavaFxAvailable = true;
+		} catch (ClassNotFoundException e) {
+			isJavaFxAvailable = false;
+		}
+		if (!isJavaFxAvailable) {
+			Image resized = getScaledImage(new ImageIcon(InitUI.class.getClassLoader().getResource("arionum_icon.png")).getImage(), 60, 60);
+			JOptionPane.showInputDialog(
+			                    new JFrame(),
+			                    "JavaFX is not installed!:\n"
+			                    + "\"Please copy following commands into your terminal\"",
+			                    "JAVAFX NOT FOUND!!!",
+			                    JOptionPane.PLAIN_MESSAGE,
+			                    new ImageIcon(resized),
+			                    null,
+			                     "sudo apt-get install openjfx"
+			                    + " && sudo cp /usr/share/java/openjfx/jre/lib/ext/* /usr/lib/jvm/java-1.8.0-openjdk-amd64/lib"
+			                    + " && sudo cp /usr/share/java/openjfx/lib/* /usr/lib/jvm/java-1.8.0-openjdk-amd64/lib"
+			                    + " && sudo chmod 777 -R /usr/lib/jvm/java-1.8.0-openjdk-amd64");
+			
+		} else {
+			InitUI.initUI();
+			new ArionumMain();
+		}
 	}
 
 	public void init() {
-		
+
 		config = new Config();
 		peerURL = "http://wallet.arionum.com/";
 		System.out.println("Initing UI....");
@@ -156,17 +198,19 @@ public class ArionumMain {
 	}
 
 	public static String getPublicKey() {
-		return publicKey;
+		//DEBUG
+		return "1gPvUp3kW6ARDU84b7g8YKssWhdfLadNqrKR81W8RKtYLupbJHimBtMSPkHGLXhFcynkABydovjiRUUCM3SZxCG";
+//		return publicKey;
 	}
 
 	public static String getPrivateKey() {
 		return privateKey;
 	}
-	
+
 	public static String getAlias() {
 		return alias;
 	}
-	
+
 	public static void setAlias(String alias) {
 		ArionumMain.alias = alias;
 	}

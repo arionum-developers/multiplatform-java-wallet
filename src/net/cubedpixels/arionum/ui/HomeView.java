@@ -4,8 +4,12 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +26,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -33,12 +39,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import net.cubedpixels.arionum.ArionumMain;
 import net.cubedpixels.arionum.api.ApiRequest;
 import net.cubedpixels.arionum.api.ApiRequest.RequestFeedback;
@@ -74,8 +82,9 @@ public class HomeView extends Application {
 			setupAddressAndAlias(root);
 			setupTransactions(root);
 			setupIcon(primaryStage);
-			
+
 			ResizeHelper.addResizeListener(primaryStage);
+			
 			onViewChange(primaryStage, root);
 
 			primaryStage.show();
@@ -150,18 +159,13 @@ public class HomeView extends Application {
 		((Text)root.lookup("#wallet_QR_text")).setTranslateX(resetValue/2 +newValue/2);
 		((ImageView)root.lookup("#qrimage")).setTranslateX(resetValue/2 +newValue/2);
 		
+
+		((GridPane)root.lookup("#tableWrapper")).setPrefWidth((-(((GridPane)root.lookup("#tableWrapper")).getBoundsInParent().getMinX()*2)) +newValue);
+		
 		
 		for (Node node : nodes) {
 			if (node instanceof Pane) {
 				Pane pane = (Pane) root.lookup("#" + node.getId());
-
-				pane.setPrefWidth((double) newValue);
-				pane.setMinWidth((double) newValue);
-				pane.setMaxWidth((double) newValue);
-			}
-			if (node instanceof TableView) {
-				@SuppressWarnings("rawtypes")
-				TableView pane = (TableView) node;
 				pane.setPrefWidth((double) newValue);
 				pane.setMinWidth((double) newValue);
 				pane.setMaxWidth((double) newValue);
@@ -190,16 +194,13 @@ public class HomeView extends Application {
 		((Text)root.lookup("#wallet_QR_text")).setTranslateY(resetValue+newValue-30);
 		((ImageView)root.lookup("#qrimage")).setTranslateY(resetValue+newValue-30);
 		
+
+		((GridPane)root.lookup("#tableWrapper")).setPrefHeight(-((GridPane)root.lookup("#tableWrapper")).getBoundsInParent().getMinY() +newValue -7);
+		
+		
 		for (Node node : nodes) {
 			if (node instanceof Pane) {
 				Pane pane = (Pane) node;
-				pane.setPrefHeight((double) newValue);
-				pane.setMinHeight((double) newValue);
-				pane.setMaxHeight((double) newValue);
-			}
-			if (node instanceof TableView) {
-				@SuppressWarnings("rawtypes")
-				TableView pane = (TableView) node;
 				pane.setPrefHeight((double) newValue);
 				pane.setMinHeight((double) newValue);
 				pane.setMaxHeight((double) newValue);
@@ -220,13 +221,11 @@ public class HomeView extends Application {
 		nodes.add(minerViewPane);
 		nodes.add(infoViewPane);
 
-		nodes.add(root.lookup("#tableview"));
 		return nodes;
 	}
 
 	public static ArrayList<Node> getHeightNodes(Pane root) {
 		ArrayList<Node> nodes = new ArrayList<Node>();
-		nodes.add(root.lookup("#tableview"));
 		return nodes;
 	}
 
@@ -306,6 +305,7 @@ public class HomeView extends Application {
 		navbar.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
+				if(ResizeHelper.ResizeListener.resizing)return;
 				dragDelta.x = primaryStage.getX() - mouseEvent.getScreenX();
 				dragDelta.y = primaryStage.getY() - mouseEvent.getScreenY();
 			}
@@ -313,6 +313,7 @@ public class HomeView extends Application {
 		navbar.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
+				if(ResizeHelper.ResizeListener.resizing)return;
 				primaryStage.setX(mouseEvent.getScreenX() + dragDelta.x);
 				primaryStage.setY(mouseEvent.getScreenY() + dragDelta.y);
 			}
@@ -663,6 +664,7 @@ public class HomeView extends Application {
 					
 					if(i == 0 && lastTransID != "" && lastTransID != id)
 					{
+						System.out.println("NEW ID: "+id+"\nOLD ID: "+lastTransID);
 						lastTransID = id;
 						Platform.runLater(new Runnable() {
 							@Override
@@ -694,18 +696,48 @@ public class HomeView extends Application {
 					if (mMinute.length() < 2)
 						mMinute = "0" + mMinute;
 
-					date = mDay + "-" + mMonth + "-" + mYear + " " + mHour + ":" + mMinute;
+					date =mMonth  + "-" + mDay + "-" + mYear + " " + mHour + ":" + mMinute;
 
 					String value = doubleVal(o.getDouble("val"));
 					String fee = doubleVal(o.getDouble("fee"));
 					String confirmations = doubleVal(o.getDouble("confirmations"));
 
 					tableView.getItems()
-							.add(new Transaction(id, from, to, message, action, date, value, fee, confirmations));
+							.add(new Transaction(id, from, to, message, action, calendar.getTime(), Double.parseDouble(value),Double.parseDouble(fee)
+									, Long.parseLong(confirmations)));
+					
+					tableView.getColumns().get(0).setCellFactory(new ColumnFormatter<>(DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm")));
 				}
 			}
 		}, "getTransactions", new ApiRequest.Argument("account", ArionumMain.getAddress()),
 				new ApiRequest.Argument("limit", "1000"));
+	}
+	
+	private class ColumnFormatter<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
+
+	    private final DateTimeFormatter format;
+
+	    public ColumnFormatter(DateTimeFormatter format) {
+	        super();
+	        this.format = format;
+	    }
+
+	    @Override
+	    public TableCell<S, T> call(TableColumn<S, T> arg0) {
+	        return new TableCell<S, T>() {
+	            @Override
+	            protected void updateItem(T item, boolean empty) {
+	                super.updateItem(item, empty);
+	                if (item == null || empty) {
+	                    setGraphic(null);
+	                } else {
+	                	LocalDateTime ld = ((Date)item).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+	                    String val = ld.format(format);
+	                    setGraphic(new Label(val));
+	                }
+	            }
+	        };
+	    }
 	}
 
 	public static void showView() {

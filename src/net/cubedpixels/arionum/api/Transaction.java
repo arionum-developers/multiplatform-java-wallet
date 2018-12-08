@@ -1,5 +1,7 @@
 package net.cubedpixels.arionum.api;
 
+import java.util.Date;
+
 public class Transaction {
 
 	private String id;
@@ -8,14 +10,14 @@ public class Transaction {
 	private String message;
 
 	private String action;
-	private String date;
+	private Date date;
 
-	private String value;
-	private String fee;
-	private String confirmations;
+	private double value;
+	private double fee;
+	private long confirmations;
 
-	public Transaction(String id, String from, String to, String message, String action, String date, String value,
-			String fee, String confirmations) {
+	public Transaction(String id, String from, String to, String message, String action, Date date, double value,
+			double fee, long confirmations) {
 		this.id = id;
 		this.from = from;
 		this.to = to;
@@ -49,19 +51,19 @@ public class Transaction {
 		return action;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public String getValue() {
+	public double getValue() {
 		return value;
 	}
 
-	public String getFee() {
+	public double getFee() {
 		return fee;
 	}
 
-	public String getConfirmations() {
+	public long getConfirmations() {
 		return confirmations;
 	}
 }

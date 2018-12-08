@@ -83,6 +83,8 @@ public class ResizeHelper {
         public void setMaxHeight(double maxHeight) {
             this.maxHeight = maxHeight;
         }
+        
+        public static boolean resizing = false;
 
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -114,6 +116,10 @@ public class ResizeHelper {
                 } else {
                     cursorEvent = Cursor.DEFAULT;
                 }
+                if(cursorEvent != Cursor.DEFAULT)
+                {
+                	resizing = true;
+                }else resizing = false;
                 scene.setCursor(cursorEvent);
             } else if (MouseEvent.MOUSE_EXITED.equals(mouseEventType) || MouseEvent.MOUSE_EXITED_TARGET.equals(mouseEventType)) {
                 scene.setCursor(Cursor.DEFAULT);
@@ -122,6 +128,7 @@ public class ResizeHelper {
                 startY = stage.getHeight() - mouseEventY;
             } else if (MouseEvent.MOUSE_DRAGGED.equals(mouseEventType)) {
                 if (!Cursor.DEFAULT.equals(cursorEvent)) {
+                	resizing = true;
                     if (!Cursor.W_RESIZE.equals(cursorEvent) && !Cursor.E_RESIZE.equals(cursorEvent)) {
                         double minHeight = stage.getMinHeight() > (border * 2) ? stage.getMinHeight() : (border * 2);
                         if (Cursor.NW_RESIZE.equals(cursorEvent) || Cursor.N_RESIZE.equals(cursorEvent)
@@ -151,7 +158,7 @@ public class ResizeHelper {
                             }
                         }
                     }
-                }
+                }else resizing = false;
 
             }
         }

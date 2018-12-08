@@ -54,7 +54,6 @@ public class Notification extends Application {
 				{
 					if(n instanceof Text)
 					{
-						int nullable = 405;
 						Text t = (Text) n;
 						if(i==0)
 						{

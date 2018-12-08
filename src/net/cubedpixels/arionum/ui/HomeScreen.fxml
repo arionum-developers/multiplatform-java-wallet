@@ -11,7 +11,7 @@
 
 <AnchorPane id="rootPane" prefHeight="419.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane id="InfoView" disable="true" visible="false" layoutX="1.0" layoutY="1.0" prefHeight="419.0" prefWidth="714.0">
+      <Pane id="InfoView" disable="true" layoutX="1.0" layoutY="1.0" prefHeight="419.0" prefWidth="714.0" visible="false">
          <children>
             <Text id="info_title" fill="#000000ab" layoutX="305.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Information">
                <font>
@@ -68,7 +68,7 @@
                </image>
             </ImageView>
             <TextField id="addressline" layoutX="59.0" layoutY="69.0" prefHeight="25.0" prefWidth="499.0" />
-            <GridPane layoutX="5.0" layoutY="111.0">
+            <GridPane id="tableWrapper" layoutX="5.0" layoutY="111.0" prefHeight="303.0" prefWidth="696.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                </columnConstraints>
@@ -92,7 +92,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <GridPane.margin>
-                        <Insets right="10.0" />
+                        <Insets />
                      </GridPane.margin>
                   </TableView>
                </children>
