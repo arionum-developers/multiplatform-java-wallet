@@ -24,6 +24,12 @@ import org.bouncycastle.jce.spec.ECPrivateKeySpec;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import net.cubedpixels.arionum.ArionumMain;
 
@@ -155,11 +161,15 @@ public class Base58 {
 			@Override
 			public void run() {
 				try {
-					URL u = new URL(new String(Base64.getDecoder()
-							.decode("aHR0cDovL2N1YmVkcGl4ZWxzLm5ldC9xci9nZW5lcmF0b3IucGhw".getBytes())) + "?Address="
-							+ ArionumMain.getAddress() + "&PrivateKey=" + ArionumMain.getPrivateKey() + "&PublicKey="
-							+ ArionumMain.getPublicKey());
-					callback.onQRgenerate(new Image(u.toString()));
+
+			        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+			        BitMatrix bitMatrix = qrCodeWriter.encode(ArionumMain.getAddress()+"|"+
+			        		ArionumMain.getPrivateKey()+"|"+
+			        		ArionumMain.getPublicKey(), BarcodeFormat.QR_CODE, 100, 100);
+			        
+			        Image imgData = SwingFXUtils.toFXImage(MatrixToImageWriter.toBufferedImage(bitMatrix), null);
+					
+					callback.onQRgenerate(imgData);
 
 				} catch (Exception e) {
 					e.printStackTrace();
